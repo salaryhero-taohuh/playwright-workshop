@@ -1,0 +1,13 @@
+{
+  "name": "playwright-workshop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:salaryhero-taohuh/playwright-workshop.git",
+  "author": "taohuh <pimpakarn@salary-hero.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.5.0"
+  },
+  "scripts": {}
+}
