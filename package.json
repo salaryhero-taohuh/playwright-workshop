@@ -9,5 +9,8 @@
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0"
   },
-  "scripts": {}
+  "scripts": {
+    "ui": "playwright test --ui",
+    "test": "playwright test"
+  }
 }
