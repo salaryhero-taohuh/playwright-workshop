@@ -10,7 +10,10 @@
     "@types/node": "^25.5.0"
   },
   "scripts": {
-    "ui": "playwright test --ui",
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "playwright:install": "playwright install",
+    "report": "playwright show-report"
   }
 }
