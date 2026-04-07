@@ -59,15 +59,13 @@ test.describe('1. Assertion', () => {
 test.describe('2. Timeout', () => {
   test('2.1 failed because of timeout', async ({ page }) => {
     await page.route('https://apiv2-dev.salary-hero.com/api/v1/admin/account/profile', async (route) => {
-      await page.waitForTimeout(6000);
+      await page.waitForTimeout(6000); // 6 seconds delay to simulate a slow API response
       route.continue();
     });
 
     loginPage = new LoginPage(page);
     await loginPage.openLoginPage();
     await loginPage.login(adminAccount.email, adminAccount.password);
-
-    await page.waitForResponse('https://apiv2-dev.salary-hero.com/api/v1/admin/account/profile');
     await expect(page.locator('[data-testid="profile-name"]')).toBeVisible();
   });
 
@@ -82,14 +80,16 @@ test.describe('2. Timeout', () => {
     await loginPage.login(adminAccount.email, adminAccount.password);
 
     // Increase the timeout to 10 seconds to allow for the delayed response
+    // TODO: Will fix later by waiting API response or talk with developer to improve UI rendering
     await expect(page.locator('[data-testid="profile-name"]')).toBeVisible({ timeout: 10000});
+    //
   });
 });
 
 test.describe('3. UI Changes', () => {
   test('3.1 failed because of UI changes', async ({ page }) => {
     await page.route('https://apiv2-dev.salary-hero.com/api/v2/admin/account/employee?page=1&per_page=10&is_show_deleted=0', async (route) => {
-      await page.waitForTimeout(6000);
+      await page.waitForTimeout(6000); // 6 seconds
       route.continue();
     });
 
@@ -97,8 +97,11 @@ test.describe('3. UI Changes', () => {
     await loginPage.openLoginPage();
     await loginPage.login(adminAccount.email, adminAccount.password);
 
+
+    // Action
     await page.locator('[data-testid="Employee-menu"]').click();
 
+    // Assertion
     await expect(page.locator('[data-testid="undefined-row-0"]').locator('.huMEQW').nth(0))
     .toHaveText('PCS Company - integration');
   });
@@ -113,9 +116,13 @@ test.describe('3. UI Changes', () => {
     await loginPage.openLoginPage();
     await loginPage.login(adminAccount.email, adminAccount.password);
     
+    // Action
     await page.locator('[data-testid="Employee-menu"]').click();
 
+    // Wait for API response
     await page.waitForResponse('https://apiv2-dev.salary-hero.com/api/v2/admin/account/employee?page=1&per_page=10&is_show_deleted=0');
+
+    // Assertion
     await expect(page.locator('[data-testid="undefined-row-0"]').locator('.huMEQW').nth(0))
     .toHaveText('PCS Company - integration');
   });
@@ -155,6 +162,8 @@ test.describe('4. Locator Issues', () => {
     await loginPage.login(adminAccount.email, adminAccount.password);
 
     await page.locator('[data-testid="Employee-menu"]').click();
-    await expect(page.getByText('Create Employee')).toBeVisible();
+
+    // Before
+    await expect(page.locator('.ant-space-item')).toHaveText('Create Employee');
   });
 })
